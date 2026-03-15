@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>西麻布 コピークラブ</title>
+    <style>
+        /* CSSリセットとベース設定 */
+        * {
+            box-sizing: border-box;
+        }
+        body, h1, h2, p {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #050505; /* 深い黒 */
+            color: #ffffff;
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.8;
+            letter-spacing: 0.1em;
+            text-align: center;
+            overflow-x: hidden; /* 全体の横揺れを防止 */
+        }
+
+        /* レイアウトコンテナ */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* セクション共通 */
+        section {
+            padding: 100px 0;
+        }
+        h2 {
+            font-size: 1.4rem;
+            letter-spacing: 0.2em;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            font-weight: normal;
+        }
+
+        /* ----- トップセクション ----- */
+        #top {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            position: relative;
+        }
+        #top img.logo {
+            max-width: 280px; /* ロゴのサイズ */
+            width: 100%;
+            height: auto;
+            margin-bottom: 40px;
+        }
+        .catchphrase {
+            font-size: 1rem;
+            margin-bottom: 8px;
+            letter-spacing: 0.15em;
+        }
+        .catchphrase-en {
+            font-size: 0.8rem;
+            color: #888888;
+            letter-spacing: 0.05em;
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            font-size: 0.7rem;
+            color: #555555;
+            letter-spacing: 0.2em;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* ----- About Us セクション (横スクロールギャラリー) ----- */
+        .about-gallery-container {
+            width: 100vw; /* 画面幅いっぱい */
+            margin-left: calc(50% - 50vw); /* コンテナの制限を解除して中央配置 */
+            overflow-x: auto; /* 横スクロールを有効化 */
+            -webkit-overflow-scrolling: touch; /* スマホでの滑らかなスクロール */
+            scroll-snap-type: x mandatory; /* スナップ機能（ピタッと止まる） */
+            margin-bottom: 50px;
+            
+            /* スクロールバーを非表示にする（デザインをスッキリさせるため） */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .about-gallery-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .gallery-track {
+            display: flex;
+        }
+        
+        .gallery-item {
+            flex: 0 0 100vw; /* 1枚の画像を画面幅いっぱいに */
+            width: 100vw;
+            scroll-snap-align: center; /* 画面中央でスナップさせる */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4 / 3; /* 画像の比率（必要に応じて16/9等に変更してください） */
+            object-fit: cover;
+            display: block;
+        }
+
+        /* アバウトテキスト */
+        #about p {
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #cccccc;
+        }
+        #about .about-text {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ----- Access セクション ----- */
+        #access .access-info {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            line-height: 2;
+        }
+        #access .access-note {
+            font-size: 0.85rem;
+            color: #888888;
+            margin-top: 20px;
+        }
+        .map-wrapper {
+            margin-bottom: 40px;
+            width: 100vw;
+            margin-left: calc(50% - 50vw); /* 地図も画面幅いっぱいに広げたい場合はこの2行を有効化 */
+        }
+        .content-image {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 9; /* 地図の比率 */
+            object-fit: cover;
+            display: block;
+            border-top: 1px solid #222222;
+            border-bottom: 1px solid #222222;
+        }
+
+        /* ----- Contact セクション ----- */
+        #contact {
+            padding-bottom: 120px;
+        }
+        #contact .tel {
+            font-size: 1.2rem;
+            letter-spacing: 0.15em;
+            color: #eeeeee;
+        }
+
+        /* ----- フッター ----- */
+        footer {
+            padding: 30px 20px;
+            font-size: 0.7rem;
+            color: #444444;
+            border-top: 1px solid #1a1a1a;
+            letter-spacing: 0.1em;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top -->
+    <section id="top">
+        <div class="container">
+            <!-- トップロゴ画像 -->
+            <img src="images/logo.jpg" alt="NISHIAZABU COPY CLUB" class="logo">
+            <p class="catchphrase">大人のためのカラオケバー</p>
+            <p class="catchphrase-en">A Karaoke Bar for Discerning Adults.</p>
+        </div>
+        <div class="scroll-indicator">↓ SCROLL</div>
+    </section>
+
+    <!-- About Us -->
+    <section id="about">
+        <div class="container">
+            <h2>ABOUT US</h2>
+        </div>
+        
+        <!-- 横スクロールギャラリー（画面幅いっぱい） -->
+        <div class="about-gallery-container">
+            <div class="gallery-track">
+                <div class="gallery-item"><img src="images/m1.jpg" alt="Gallery 1" class="gallery-image"></div>
+                <div class="gallery-item"><img src="images/m2.jpg" alt="Gallery 2" class="gallery-image"></div>
+                <div class="gallery-item"><img src="images/m3.jpg" alt="Gallery 3" class="gallery-image"></div>
+                <div class="gallery-item"><img src="images/m4.jpg" alt="Gallery 4" class="gallery-image"></div>
+                <div class="gallery-item"><img src="images/m5.jpg" alt="Gallery 5" class="gallery-image"></div>
+                <div class="gallery-item"><img src="images/m6.jpg" alt="Gallery 6" class="gallery-image"></div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="about-text">
+                <p>西麻布の喧騒を離れた、隠れ家。<br>
+                大人が心ゆくまで歌と酒を愉しむための、プライベートな空間です。</p>
+                <p>上質な音響設備と、厳選された美酒。<br>
+                誰にも邪魔されない特別な夜をお過ごしください。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Access -->
+    <section id="access">
+        <div class="container">
+            <h2>ACCESS</h2>
+        </div>
+        
+        <div class="map-wrapper">
+            <!-- 地図画像（画面幅いっぱい） -->
+            <img src="images/map.jpg" alt="周辺地図" class="content-image">
+        </div>
+
+        <div class="container">
+            <div class="access-info">
+                東京都港区西麻布1-12-6 ダイアンクレストビル 8F<br>
+                03-6721-0072<br><br>
+                20:30~4:00 日曜日定休
+            </div>
+            <p class="access-note">※西麻布交差点「権八」から六本木側にすぐ</p>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+        <div class="container">
+            <h2>CONTACT</h2>
+            <p class="tel">03-6721-0072</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2026 COPY CLUB. All rights reserved.
+    </footer>
+
+</body>
+</html>
