@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>西麻布 コピークラブ</title>
+    <style>
+        /* CSSリセットとベース設定 */
+        * {
+            box-sizing: border-box;
+        }
+        body, h1, h2, p {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #050505; /* 深い黒 */
+            color: #ffffff;
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.8;
+            letter-spacing: 0.1em;
+            text-align: center;
+            overflow-x: hidden; /* 全体の横揺れを防止 */
+        }
+
+        /* レイアウトコンテナ */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* セクション共通 */
+        section {
+            padding: 100px 0;
+        }
+        h2 {
+            font-size: 1.4rem;
+            letter-spacing: 0.2em;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            font-weight: normal;
+        }
+
+        /* ----- トップセクション ----- */
+        #top {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            position: relative;
+        }
+        #top img.logo {
+            max-width: 280px; /* ロゴのサイズ */
+            width: 100%;
+            height: auto;
+            margin-bottom: 40px;
+        }
+        .catchphrase {
+            font-size: 1rem;
+            margin-bottom: 8px;
+            letter-spacing: 0.15em;
+        }
+        .catchphrase-en {
+            font-size: 0.8rem;
+            color: #888888;
+            letter-spacing: 0.05em;
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            font-size: 0.7rem;
+            color: #555555;
+            letter-spacing: 0.2em;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* ----- About Us セクション ----- */
+        #about p.lead-text {
+            margin-bottom: 40px;
+        }
+
+        /* グリッドギャラリー (2列3行) */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px; /* 画像と画像の間隔 */
+            max-width: 300px; /* ギャラリー全体の最大幅 */
+            margin: 0 auto 50px auto;
+            padding: 0 20px;
+        }
+
+        .grid-item {
+            cursor: pointer;
+            overflow: hidden;
+            aspect-ratio: 4 / 3; /* サムネイルの比率 */
+            background-color: #111; /* 画像読み込み前の背景色 */
+            border: 1px solid #222;
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        /* PC等でマウスオーバーしたときのアニメーション */
+        .grid-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* モーダル (ポップアップ) */
+        .modal {
+            display: none; /* 初期状態は非表示 */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.9); /* 半透明の黒背景 */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-wrapper {
+            position: relative;
+            display: inline-block;
+            max-width: 90%;
+            max-height: 90vh;
+        }
+
+        .modal-content {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            display: block;
+            animation: zoomIn 0.3s;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* 画像の右上に配置する×ボタン */
+        .close-btn {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 36px;
+            height: 36px;
+            background-color: #000000;
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            z-index: 1001;
+            line-height: 1;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .close-btn:hover {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        /* アバウトテキスト */
+        #about p {
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #cccccc;
+        }
+        #about .about-text {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ----- Access セクション ----- */
+        #access {
+            background-color: #050505; /* 背景色を上と合わせる */
+            padding: 80px 0 100px;
+        }
+        #access h2 {
+            border-bottom: 1px solid #333333; /* 見出しにラインを引いて強調 */
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+        }
+        #access .access-info {
+            font-size: 1.1rem; /* 文字サイズを少し大きく */
+            margin-bottom: 20px;
+            line-height: 2;
+        }
+        #access .access-note {
+            font-size: 0.85rem;
+            color: #888888;
+            margin-top: 20px;
+        }
+
+        /* 電話番号リンクスタイル */
+        .tel-link {
+            color: #ffffff;
+            text-decoration: none;
+            border-bottom: 1px solid #555555;
+            transition: opacity 0.3s;
+        }
+        .tel-link:hover {
+            opacity: 0.7;
+        }
+
+        .map-wrapper {
+            margin-bottom: 40px;
+            width: 100vw;
+            margin-left: calc(50% - 50vw); /* 地図も画面幅いっぱいに広げたい場合はこの2行を有効化 */
+        }
+        .content-image {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 9; /* 地図の比率 */
+            object-fit: cover;
+            display: block;
+            border-top: 1px solid #222222;
+            border-bottom: 1px solid #222222;
+        }
+
+        /* ----- フッター ----- */
+        footer {
+            padding: 30px 20px;
+            font-size: 0.7rem;
+            color: #444444;
+            border-top: 1px solid #1a1a1a;
+            letter-spacing: 0.1em;
+            background-color: #050505;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top -->
+    <section id="top">
+        <div class="container">
+            <!-- トップロゴ画像 -->
+            <img src="images/logo.jpg" alt="NISHIAZABU COPY CLUB" class="logo">
+            <p class="catchphrase">大人のためのカラオケバー</p>
+            <p class="catchphrase-en">A Karaoke Bar for Discerning Adults.</p>
+        </div>
+        <div class="scroll-indicator">↓ SCROLL</div>
+    </section>
+
+    <!-- About Us -->
+    <section id="about">
+        <div class="container">
+            <h2>ABOUT US</h2>
+            <p class="lead-text">セクシャルフリーな空間</p>
+        </div>
+
+        <!-- グリッドギャラリー (2列 x 3行) -->
+        <!-- data-full属性に拡大時の画像(c1~c6)を指定し、サムネイルとしてm1~m6を表示します -->
+        <div class="gallery-grid">
+            <div class="grid-item" data-full="images/c1.jpg">
+                <img src="images/m1.jpg" alt="Gallery Thumbnail 1">
+            </div>
+            <div class="grid-item" data-full="images/c2.jpg">
+                <img src="images/m2.jpg" alt="Gallery Thumbnail 2">
+            </div>
+            <div class="grid-item" data-full="images/c3.jpg">
+                <img src="images/m3.jpg" alt="Gallery Thumbnail 3">
+            </div>
+            <div class="grid-item" data-full="images/c4.jpg">
+                <img src="images/m4.jpg" alt="Gallery Thumbnail 4">
+            </div>
+            <div class="grid-item" data-full="images/c5.jpg">
+                <img src="images/m5.jpg" alt="Gallery Thumbnail 5">
+            </div>
+            <div class="grid-item" data-full="images/c6.jpg">
+                <img src="images/m6.jpg" alt="Gallery Thumbnail 6">
+            </div>
+        </div>
+
+        <!-- ポップアップ用のモーダル領域 -->
+        <div id="image-modal" class="modal">
+            <!-- ラッパーを追加して×ボタンを画像の右上に配置 -->
+            <div class="modal-wrapper">
+                <span class="close-btn">&times;</span>
+                <img class="modal-content" id="full-image" alt="拡大画像">
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="about-text">
+                <p>西麻布の喧騒を離れた、隠れ家。<br>
+                大人が心ゆくまで歌と酒を愉しむための、プライベートな空間です。</p>
+                <p>上質な音響設備と、厳選された美酒。<br>
+                誰にも邪魔されない特別な夜をお過ごしください。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Access -->
+    <section id="access">
+        <div class="container">
+            <h2>ACCESS</h2>
+        </div>
+        
+        <div class="map-wrapper">
+            <!-- 地図画像（画面幅いっぱい） -->
+            <img src="images/map.jpg" alt="周辺地図" class="content-image">
+        </div>
+
+        <div class="container">
+            <div class="access-info">
+                東京都港区西麻布1-12-6 ダイアンクレストビル 8F<br>
+                <!-- 電話番号をタップで発信できるリンクに変更 -->
+                TEL：<a href="tel:03-6721-0072" class="tel-link">03-6721-0072</a><br><br>
+                20:30~4:00 日曜日定休
+            </div>
+            <p class="access-note">※西麻布交差点「権八」から六本木側にすぐ</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2026 COPY CLUB. All rights reserved.
+    </footer>
+
+    <!-- ギャラリーポップアップ用のスクリプト -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gridItems = document.querySelectorAll('.grid-item');
+            const modal = document.getElementById('image-modal');
+            const fullImage = document.getElementById('full-image');
+            const closeBtn = document.querySelector('.close-btn');
+
+            // サムネイルをクリックした時の処理
+            gridItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    // data-full属性から拡大画像のパスを取得
+                    const fullSrc = item.getAttribute('data-full');
+                    fullImage.src = fullSrc;
+                    // モーダルを表示
+                    modal.style.display = 'flex';
+                });
+            });
+
+            // 閉じる(×)ボタンをクリックした時の処理
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+                fullImage.src = ''; // ソースをクリアしておく
+            });
+
+            // モーダルの背景（画像以外の黒い部分）をクリックしても閉じる処理
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal || e.target.classList.contains('modal-wrapper')) {
+                    modal.style.display = 'none';
+                    fullImage.src = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
