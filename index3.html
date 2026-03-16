@@ -144,7 +144,11 @@
             max-height: 90vh;
             object-fit: contain;
             display: block;
-            animation: zoomIn 0.3s;
+            opacity: 0; /* 最初は見えない状態にする */
+        }
+
+        .modal-content.loaded {
+            animation: zoomIn 0.3s forwards;
         }
 
         @keyframes zoomIn {
@@ -169,10 +173,19 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
             z-index: 1001;
             line-height: 1;
             box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            
+            /* 初期状態は非表示 */
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s, background-color 0.3s, color 0.3s;
+        }
+
+        .close-btn.loaded {
+            opacity: 1;
+            pointer-events: auto;
         }
 
         .close-btn:hover {
@@ -297,7 +310,6 @@
 
         <!-- ポップアップ用のモーダル領域 -->
         <div id="image-modal" class="modal">
-            <!-- ラッパーを追加して×ボタンを画像の右上に配置 -->
             <div class="modal-wrapper">
                 <span class="close-btn">&times;</span>
                 <img class="modal-content" id="full-image" alt="拡大画像">
@@ -352,25 +364,45 @@
             // サムネイルをクリックした時の処理
             gridItems.forEach(item => {
                 item.addEventListener('click', () => {
-                    // data-full属性から拡大画像のパスを取得
+                    // 表示前のリセット
+                    fullImage.classList.remove('loaded');
+                    closeBtn.classList.remove('loaded');
+                    
                     const fullSrc = item.getAttribute('data-full');
-                    fullImage.src = fullSrc;
-                    // モーダルを表示
+                    
+                    // モーダルの背景はすぐに表示
                     modal.style.display = 'flex';
+                    
+                    // 画像の読み込みが完了したら表示する
+                    fullImage.onload = () => {
+                        fullImage.classList.add('loaded');
+                        closeBtn.classList.add('loaded');
+                    };
+                    
+                    fullImage.src = fullSrc;
+                    
+                    // キャッシュされている場合は即座にonloadを発火
+                    if (fullImage.complete) {
+                        fullImage.onload();
+                    }
                 });
             });
 
-            // 閉じる(×)ボタンをクリックした時の処理
-            closeBtn.addEventListener('click', () => {
+            // モーダルを閉じる関数
+            const closeModal = () => {
                 modal.style.display = 'none';
                 fullImage.src = ''; // ソースをクリアしておく
-            });
+                fullImage.classList.remove('loaded');
+                closeBtn.classList.remove('loaded');
+            };
 
-            // モーダルの背景（画像以外の黒い部分）をクリックしても閉じる処理
+            // 閉じる(×)ボタンをクリックした時の処理
+            closeBtn.addEventListener('click', closeModal);
+
+            // モーダルの背景をクリックしても閉じる処理
             modal.addEventListener('click', (e) => {
                 if (e.target === modal || e.target.classList.contains('modal-wrapper')) {
-                    modal.style.display = 'none';
-                    fullImage.src = '';
+                    closeModal();
                 }
             });
         });
